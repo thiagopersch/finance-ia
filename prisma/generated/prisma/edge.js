@@ -190,7 +190,7 @@ const config = {
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
-    "rootEnvPath": "../../../.env",
+    "rootEnvPath": null,
     "schemaEnvPath": "../../../.env"
   },
   "relativePath": "../..",
@@ -200,17 +200,18 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {
         "fromEnvVar": "DATABASE_URL",
-        "value": "prisma+postgres://accelerate.prisma-data.net/?api_key=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJhcGlfa2V5IjoiODQxMzQwNGEtZTNlYS00NTllLTlkMDQtNjgwODM0ZWYzYmM4IiwidGVuYW50X2lkIjoiNjZjNWNkNDJmOWYwYzg3MDliMGZhNDk1NzNmM2YxNzlmN2Q1YTA2YWQ1MjkzMjEzNGU2ZTY0NmFlOWY3NTFmZSIsImludGVybmFsX3NlY3JldCI6IjE1NjNlNTU3LTVkZTctNGYyOS1hOTk5LTcyMjc5YjI4YmJmNiJ9.d5B3Dz1cJTJ_CgUbTO7IG8ogmyUuQ-VjH35V9qjZCkw"
+        "value": null
       }
     }
   },
   "inlineSchema": "generator client {\n  provider = \"prisma-client-js\"\n  output   = \"./generated/prisma\"\n}\n\ndatasource db {\n  provider = \"postgresql\"\n  url      = env(\"DATABASE_URL\")\n}\n\nmodel User {\n  id              String    @id @default(uuid())\n  email           String    @unique\n  name            String\n  password        String\n  change_passowrd Boolean   @default(true)\n  status          Boolean   @default(true)\n  created_at      DateTime  @default(now())\n  updated_at      DateTime  @updatedAt\n  deleted_at      DateTime?\n}\n\nmodel transaction {\n  id                   String                     @id @default(uuid())\n  name                 String\n  type                 TransactionType\n  amount               Decimal                    @db.Decimal(10, 2)\n  date                 DateTime\n  category_id          String\n  transaction_category transaction_category       @relation(fields: [category_id], references: [id])\n  payment_method_id    String\n  payment_method       transaction_payment_method @relation(fields: [payment_method_id], references: [id])\n  created_at           DateTime                   @default(now())\n  updated_at           DateTime                   @updatedAt\n  deleted_at           DateTime?\n}\n\nenum TransactionType {\n  DEPOSIT\n  EXPENSE\n  INVESTIMENT\n}\n\nmodel transaction_category {\n  id          String        @id @default(uuid())\n  name        String\n  status      Boolean       @default(true)\n  created_at  DateTime      @default(now())\n  updated_at  DateTime      @updatedAt\n  deleted_at  DateTime?\n  transaction transaction[]\n}\n\nmodel transaction_payment_method {\n  id          String        @id @default(uuid())\n  name        String\n  status      Boolean       @default(true)\n  created_at  DateTime      @default(now())\n  updated_at  DateTime      @updatedAt\n  deleted_at  DateTime?\n  transaction transaction[]\n}\n",
   "inlineSchemaHash": "e855745a2a9523dd59d4edc5576cdadc05048fd0ac64a0f78a383f844f89473f",
-  "copyEngine": false
+  "copyEngine": true
 }
 config.dirname = '/'
 

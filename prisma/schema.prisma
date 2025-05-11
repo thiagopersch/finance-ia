@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id              String    @id @default(uuid())
+  email           String    @unique
+  name            String
+  password        String
+  change_passowrd Boolean   @default(true)
+  status          Boolean   @default(true)
+  created_at      DateTime  @default(now())
+  updated_at      DateTime  @updatedAt
+  deleted_at      DateTime?
+}
+
+model transaction {
+  id                   String                     @id @default(uuid())
+  name                 String
+  type                 TransactionType
+  amount               Decimal                    @db.Decimal(10, 2)
+  date                 DateTime
+  category_id          String
+  transaction_category transaction_category       @relation(fields: [category_id], references: [id])
+  payment_method_id    String
+  payment_method       transaction_payment_method @relation(fields: [payment_method_id], references: [id])
+  created_at           DateTime                   @default(now())
+  updated_at           DateTime                   @updatedAt
+  deleted_at           DateTime?
+}
+
+enum TransactionType {
+  DEPOSIT
+  EXPENSE
+  INVESTIMENT
+}
+
+model transaction_category {
+  id          String        @id @default(uuid())
+  name        String
+  status      Boolean       @default(true)
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+  deleted_at  DateTime?
+  transaction transaction[]
+}
+
+model transaction_payment_method {
+  id          String        @id @default(uuid())
+  name        String
+  status      Boolean       @default(true)
+  created_at  DateTime      @default(now())
+  updated_at  DateTime      @updatedAt
+  deleted_at  DateTime?
+  transaction transaction[]
+}

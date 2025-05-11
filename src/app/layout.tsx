@@ -1,4 +1,5 @@
 import { RootProvider } from '@/providers/RootProvider';
+import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
 import { JetBrains_Mono, Montserrat } from 'next/font/google';
 import './globals.css';
@@ -24,12 +25,23 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning>
-      <body
-        className={`${montserrat.variable} ${jetBrainsMono.variable} antialiased`}
-      >
-        <RootProvider>{children}</RootProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="pt-BR" suppressHydrationWarning>
+        <body
+          className={`${montserrat.variable} ${jetBrainsMono.variable} antialiased`}
+        >
+          {/*  <header className="flex justify-end items-center p-4 gap-4 h-16">
+            <SignedOut>
+              <SignInButton />
+              <SignUpButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton showName userProfileMode="modal" />
+            </SignedIn>
+          </header> */}
+          <RootProvider>{children}</RootProvider>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }

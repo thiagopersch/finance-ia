@@ -1,4 +1,6 @@
+import Loading from '@/app/loading';
 import { ThemeProvider as NextThemesProvider } from 'next-themes';
+import { Suspense } from 'react';
 
 type RootLayoutProps = {
   children: React.ReactNode;
@@ -6,13 +8,15 @@ type RootLayoutProps = {
 
 export function RootProvider({ children }: RootLayoutProps) {
   return (
-    <NextThemesProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-    >
-      {children}
-    </NextThemesProvider>
+    <Suspense fallback={<Loading />}>
+      <NextThemesProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+      >
+        {children}
+      </NextThemesProvider>
+    </Suspense>
   );
 }
